@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const Card = (article) => {
   //creating elements
   const card = document.createElement('div');
@@ -25,6 +27,11 @@ const Card = (article) => {
   imgContainer.appendChild(img);
   author.appendChild(by);
 
+  //adding click event listener
+  card.addEventListener('click', event =>{
+    console.log(article.headline);
+  })
+
   return card;
   // TASK 5
   // ---------------------
@@ -47,6 +54,31 @@ const Card = (article) => {
 }
 
 const cardAppender = (selector) => {
+  const cardContainer = document.querySelector(selector);
+
+  axios.get('http://localhost:5000/api/articles')
+    .then(response => {
+        for (let i = 0; i < response.data.articles.javascript.length; i++){
+          cardContainer.appendChild(Card(response.data.articles.javascript[i]));
+        }
+        for (let i = 0; i < response.data.articles.bootstrap.length; i++){
+          cardContainer.appendChild(Card(response.data.articles.bootstrap[i]));
+        }
+        for (let i = 0; i < response.data.articles.technology.length; i++){
+          cardContainer.appendChild(Card(response.data.articles.technology[i]));
+        }
+        for (let i = 0; i < response.data.articles.jquery.length; i++){
+          cardContainer.appendChild(Card(response.data.articles.jquery[i]));
+        }
+        for (let i = 0; i < response.data.articles.node.length; i++){
+          cardContainer.appendChild(Card(response.data.articles.node[i]));
+        }
+    })
+    .catch(err => {
+      console.log(err);
+    })
+
+    return cardContainer;
   // TASK 6
   // ---------------------
   // Implement this function that takes a css selector as its only argument.
