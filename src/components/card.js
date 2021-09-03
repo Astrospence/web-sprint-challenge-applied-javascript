@@ -58,7 +58,7 @@ const cardAppender = (selector) => {
 
   axios.get('http://localhost:5000/api/articles')
     .then(response => {
-        for (let i = 0; i < response.data.articles.javascript.length; i++){
+        /*for (let i = 0; i < response.data.articles.javascript.length; i++){
           cardContainer.appendChild(Card(response.data.articles.javascript[i]));
         }
         for (let i = 0; i < response.data.articles.bootstrap.length; i++){
@@ -72,7 +72,16 @@ const cardAppender = (selector) => {
         }
         for (let i = 0; i < response.data.articles.node.length; i++){
           cardContainer.appendChild(Card(response.data.articles.node[i]));
-        }
+        }*/
+
+        //The above code functioned but it was static and didn't allow for changes from the API, so I converted it to the below code which should dynamically update with the API:
+
+        const articlesArray = Object.entries(response.data.articles);
+        articlesArray.forEach(index => {
+          index[1].forEach(item => {
+            cardContainer.appendChild(Card(item));
+          })
+        })
     })
     .catch(err => {
       console.log(err);
