@@ -1,4 +1,38 @@
+import axios from "axios";
+
 const Card = (article) => {
+  //creating elements
+  const card = document.createElement('div');
+  const headline = document.createElement('div');
+  const author = document.createElement('div');
+  const imgContainer = document.createElement('div');
+  const img = document.createElement('img');
+  const by = document.createElement('span');
+
+  //adding classes
+  card.classList.add('card');
+  headline.classList.add('headline');
+  author.classList.add('author');
+  imgContainer.classList.add('img-container');
+
+  //adding content
+  headline.textContent = article.headline;
+  img.src = article.authorPhoto
+  by.textContent = `By ${article.authorName}`;
+
+  //building out the element
+  card.appendChild(headline);
+  card.appendChild(author);
+  author.appendChild(imgContainer);
+  imgContainer.appendChild(img);
+  author.appendChild(by);
+
+  //adding click event listener
+  card.addEventListener('click', event =>{
+    console.log(article.headline);
+  })
+
+  return card;
   // TASK 5
   // ---------------------
   // Implement this function, which should return the markup you see below.
@@ -20,6 +54,40 @@ const Card = (article) => {
 }
 
 const cardAppender = (selector) => {
+  const cardContainer = document.querySelector(selector);
+
+  axios.get('http://localhost:5000/api/articles')
+    .then(response => {
+        /*for (let i = 0; i < response.data.articles.javascript.length; i++){
+          cardContainer.appendChild(Card(response.data.articles.javascript[i]));
+        }
+        for (let i = 0; i < response.data.articles.bootstrap.length; i++){
+          cardContainer.appendChild(Card(response.data.articles.bootstrap[i]));
+        }
+        for (let i = 0; i < response.data.articles.technology.length; i++){
+          cardContainer.appendChild(Card(response.data.articles.technology[i]));
+        }
+        for (let i = 0; i < response.data.articles.jquery.length; i++){
+          cardContainer.appendChild(Card(response.data.articles.jquery[i]));
+        }
+        for (let i = 0; i < response.data.articles.node.length; i++){
+          cardContainer.appendChild(Card(response.data.articles.node[i]));
+        }*/
+
+        //The above code functioned but it was static and didn't allow for changes from the API, so I converted it to the below code which should dynamically update with the API:
+
+        const articlesArray = Object.entries(response.data.articles);
+        articlesArray.forEach(index => {
+          index[1].forEach(item => {
+            cardContainer.appendChild(Card(item));
+          })
+        })
+    })
+    .catch(err => {
+      console.log(err);
+    })
+
+    return cardContainer;
   // TASK 6
   // ---------------------
   // Implement this function that takes a css selector as its only argument.

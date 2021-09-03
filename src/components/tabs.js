@@ -1,4 +1,38 @@
+import axios from "axios";
+
 const Tabs = (topics) => {
+  //creating elements
+  const top = document.createElement('div');
+  const item1 = document.createElement('div');
+  const item2 = document.createElement('div');
+  const item3 = document.createElement('div');
+  const item4 = document.createElement('div');
+  const item5 = document.createElement('div');
+
+  //adding classes
+  top.classList.add('topics');
+  item1.classList.add('tab');
+  item2.classList.add('tab');
+  item3.classList.add('tab');
+  item4.classList.add('tab');
+  item5.classList.add('tab');
+  
+
+  //adding content
+  item1.textContent = topics[0];
+  item2.textContent = topics[1];
+  item3.textContent = topics[2];
+  item4.textContent = topics[3];
+  item5.textContent = topics[4];
+
+  //building out the element
+  top.appendChild(item1);
+  top.appendChild(item2);
+  top.appendChild(item3);
+  top.appendChild(item4);
+  top.appendChild(item5);
+
+  return top;
   // TASK 3
   // ---------------------
   // Implement this function which takes an array of strings ("topics") as its only argument.
@@ -16,6 +50,16 @@ const Tabs = (topics) => {
 }
 
 const tabsAppender = (selector) => {
+  const tabsContainer = document.querySelector(selector);
+
+  axios.get('http://localhost:5000/api/topics')
+    .then(response => {
+      tabsContainer.appendChild(Tabs(response.data.topics));
+    })
+    .catch(err => {
+      console.log(err);
+    })
+    return tabsContainer;
   // TASK 4
   // ---------------------
   // Implement this function which takes a css selector as its only argument.
